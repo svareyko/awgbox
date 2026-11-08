@@ -1,6 +1,6 @@
 # wireguard-go with AmneziaWG obfuscation
 
-**Read this when:** you work on the WireGuard engine under this sing-box tree.
+**Read this when:** you work on the WireGuard engine under this awgbox tree.
 **Sections:** 1 What this is · 2 Grafted files · 3 Tests · 4 How it is wired in
 
 ## 1. What this is
@@ -67,4 +67,4 @@ firewall that asks about listening programs, skip them as above.
 ## 4. How it is wired in
 
 The root `go.mod` of this repository replaces `github.com/sagernet/wireguard-go`
-with this directory, so sing-box builds against it without changing imports.
+with this directory, so awgbox builds against it without changing imports.

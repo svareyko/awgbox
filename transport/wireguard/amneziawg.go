@@ -81,7 +81,7 @@ func (o AmneziaWGOptions) headers() []amneziaWGKeyValue {
 }
 
 // Validate rejects what the AmneziaWG device would refuse at IpcSet, or
-// would break on later, so that the error surfaces in `sing-box check`.
+// would break on later, so that the error surfaces in `awgbox check`.
 func (o AmneziaWGOptions) Validate() error {
 	_, err := o.validate()
 	return err

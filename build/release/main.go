@@ -1,7 +1,11 @@
-// Command release builds sing-box for a list of targets and packages the
+// Command release builds awgbox for a list of targets and packages the
 // results the way upstream's release does: one directory per target with the
 // binary and LICENSE, a tar.gz (darwin, linux) or zip (windows) of it, and
 // SHA256SUMS files. It uses only the standard library and the go toolchain.
+//
+// The product is called awgbox; the main package stays at upstream's path
+// ./cmd/sing-box and the module path stays upstream's, so that rebasing onto a
+// newer upstream release touches no import paths.
 package main
 
 import (
@@ -23,6 +27,8 @@ import (
 )
 
 const (
+	productName    = "awgbox"
+	mainPackage    = "./cmd/sing-box"
 	versionPackage = "github.com/sagernet/sing-box/constant.Version"
 	defaultTargets = "darwin/arm64,darwin/amd64,windows/amd64,windows/arm64,linux/amd64"
 	// length of "<sha256 hex>  " in a checksum line
@@ -139,7 +145,7 @@ func run() error {
 }
 
 func buildTarget(goBin, version, outDir string, t target, tags, ldflags string, commitTime time.Time) (result, error) {
-	name := fmt.Sprintf("sing-box-%s-%s-%s", version, t.goos, t.goarch)
+	name := fmt.Sprintf("%s-%s-%s-%s", productName, version, t.goos, t.goarch)
 	dir := filepath.Join(outDir, name)
 	// Start from a clean directory so stale files never end up in the archive.
 	if err := os.RemoveAll(dir); err != nil {
@@ -149,7 +155,7 @@ func buildTarget(goBin, version, outDir string, t target, tags, ldflags string, 
 		return result{}, err
 	}
 
-	binName := "sing-box"
+	binName := productName
 	if t.goos == "windows" {
 		binName += ".exe"
 	}
@@ -166,7 +172,7 @@ func buildTarget(goBin, version, outDir string, t target, tags, ldflags string, 
 		"-tags", buildTags,
 		"-ldflags", ldflags,
 		"-o", binPath,
-		"./cmd/sing-box")
+		mainPackage)
 	cmd.Env = append(os.Environ(),
 		"CGO_ENABLED=0",
 		"GOOS="+t.goos,

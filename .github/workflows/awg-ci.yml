@@ -1,4 +1,4 @@
-name: AWG CI
+name: awgbox CI
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
       - name: Vet
         # Two upstream files trip the unsafeptr analyzer; upstream's lint never runs govet.
         run: go vet -unsafeptr=false ./...
-      - name: Test sing-box packages
+      - name: Test the endpoint packages
         run: go test ./option/ ./transport/wireguard/
       - name: Test wireguard-go
         working-directory: wireguard-go

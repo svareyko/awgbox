@@ -1,4 +1,4 @@
-name: AWG release
+name: awgbox release
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build, without the leading v (e.g. 1.14.4-awg.1)'
+        description: 'Version to build, without the leading v (e.g. 1.14.4-awg.2)'
         required: true
         type: string
 
@@ -52,7 +52,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sing-box-${{ steps.version.outputs.version }}
+          name: awgbox-${{ steps.version.outputs.version }}
           path: dist/${{ steps.version.outputs.version }}
           if-no-files-found: error
       - name: Create GitHub release

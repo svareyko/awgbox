@@ -243,7 +243,7 @@ Magic header of transport messages, a range.
 Decoy packet sent before the junk packets and the handshake initiation, written in the AmneziaWG
 packet language (`<b 0x...>`, `<c>`, `<t>`, `<r N>`, `<rc N>`, `<rd N>`).
 
-The value is case-sensitive and passed to the device as is: it is checked when the endpoint starts, not by `sing-box check`.
+The value is case-sensitive and passed to the device as is: it is checked when the endpoint starts, not by `awgbox check`.
 
 #### i2
 

@@ -8,6 +8,8 @@
 /dist/
 /sing-box
 /sing-box.exe
+/awgbox
+/awgbox.exe
 /*.jar
 /*.aar
 /*.xcframework/

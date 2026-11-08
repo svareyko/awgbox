@@ -1,4 +1,4 @@
-# AmneziaWG fork release build. Usage: make awg-release [AWG_VERSION=1.14.4-awg.1]
+# awgbox release build. Usage: make awg-release [AWG_VERSION=1.14.4-awg.2]
 AWG_VERSION ?= $(shell git describe --tags --exact-match 2>/dev/null | sed 's/^v//')
 
 .PHONY: awg-release

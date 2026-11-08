@@ -1,5 +1,7 @@
-This repository is a fork of sing-box that adds AmneziaWG support to the
-WireGuard endpoint. It combines the following works, each under its own license.
+This repository is awgbox, a fork of sing-box that adds AmneziaWG support to
+the WireGuard endpoint. awgbox is not affiliated with or endorsed by SagerNet
+or Amnezia VPN; the name sing-box appears here only to state the origin of the
+code. awgbox combines the following works, each under its own license.
 
 sing-box
   Copyright (C) SagerNet. Licensed under the GNU General Public License,
