@@ -1,0 +1,22 @@
+This repository is a fork of sing-box that adds AmneziaWG support to the
+WireGuard endpoint. It combines the following works, each under its own license.
+
+sing-box
+  Copyright (C) SagerNet. Licensed under the GNU General Public License,
+  version 3 or (at your option) any later version. See LICENSE.
+  https://github.com/SagerNet/sing-box
+
+wireguard-go (wireguard-go/)
+  Copyright (C) WireGuard LLC. Licensed under the MIT License. See
+  wireguard-go/LICENSE. This copy is SagerNet's fork of wireguard-go, taken
+  at commit e4d85ef2ed38.
+
+amneziawg-go v3.1.20260828 (wireguard-go/device/)
+  Copyright (C) Amnezia VPN. Licensed under the MIT License. See
+  wireguard-go/LICENSE.amneziawg-go. Its obfuscation code is grafted into
+  wireguard-go/device/.
+
+Leadaxe/sing-box-lx v1.14.4-lx.33 and Leadaxe/wireguard-go-awg2-lx
+  Licensed under the GNU General Public License, version 3 and the MIT License
+  respectively. They served as the reference for adapting the amneziawg-go
+  graft to SagerNet's wireguard-go and for the gating of reserved bytes.

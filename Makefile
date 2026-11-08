@@ -294,3 +294,4 @@ update:
 
 %:
 	@:
+include build/awg.mk

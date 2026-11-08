@@ -8,7 +8,6 @@
 /dist/
 /sing-box
 /sing-box.exe
-/build/
 /*.jar
 /*.aar
 /*.xcframework/
@@ -18,6 +17,6 @@
 .DS_Store
 /config.d/
 /venv/
-CLAUDE.md
-AGENTS.md
 /.claude/
+/.modcache/
+/.gocache/

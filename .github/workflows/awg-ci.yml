@@ -1,0 +1,32 @@
+name: AWG CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+env:
+  GOTOOLCHAIN: local
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.5'
+          check-latest: false
+      - name: Build
+        run: go build ./...
+      - name: Vet
+        # Two upstream files trip the unsafeptr analyzer; upstream's lint never runs govet.
+        run: go vet -unsafeptr=false ./...
+      - name: Test sing-box packages
+        run: go test ./option/ ./transport/wireguard/
+      - name: Test wireguard-go
+        working-directory: wireguard-go
+        run: go test ./...
