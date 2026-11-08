@@ -30,3 +30,6 @@ jobs:
       - name: Test wireguard-go
         working-directory: wireguard-go
         run: go test ./...
+      - name: Test interoperability with amneziawg-go
+        working-directory: wireguard-go/interop
+        run: go test ./...
