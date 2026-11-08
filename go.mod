@@ -198,3 +198,6 @@ require (
 	lukechampine.com/blake3 v1.3.0 // indirect
 	zombiezen.com/go/capnproto2 v2.18.2+incompatible // indirect
 )
+
+// The WireGuard implementation with AmneziaWG obfuscation; see wireguard-go/README.md.
+replace github.com/sagernet/wireguard-go => ./wireguard-go
