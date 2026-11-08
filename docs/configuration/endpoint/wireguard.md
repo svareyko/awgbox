@@ -159,7 +159,7 @@ CPU count is used by default.
 AmneziaWG obfuscation parameters, at the endpoint level as in an AmneziaWG (`awg-quick`) configuration file.
 With none of them set, the endpoint is plain WireGuard.
 
-Fields marked ==Server== must equal the server's values, or no handshake or no data gets through.
+Fields marked ==Server== must equal the server's values (for `random_trailers`, be set on both sides), or no handshake or no data gets through.
 The others only change how this client behaves and can differ from the server.
 
 A range value is a number, or a string `"N"` or `"N-M"` with `N <= M`, both unsigned 32-bit integers.
@@ -294,7 +294,11 @@ Range overriding the WireGuard maximum number of handshake attempts (`18`).
 
 #### random_trailers
 
+==Server==
+
 Append a random-length random tail to handshake messages and inside transport packets.
+
+Both sides must have it set: a receiver accepts a datagram longer than the expected size only when its own `random_trailers` is on, so a mismatch in either direction drops handshake messages.
 
 #### disable_cookies
 
