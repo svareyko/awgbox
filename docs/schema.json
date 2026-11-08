@@ -280,6 +280,19 @@
         }
       ]
     },
+    "AmneziaWGRange": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        {
+          "type": "string",
+          "pattern": "^\\d+(-\\d+)?$"
+        }
+      ]
+    },
     "AnyTLSUser": {
       "type": "object",
       "properties": {
@@ -4772,6 +4785,95 @@
             },
             "fallback_delay": {
               "$ref": "#/$defs/Duration"
+            },
+            "jc": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "jmin": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "jmax": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "s1": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            },
+            "s2": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            },
+            "s3": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            },
+            "s4": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            },
+            "h1": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "h2": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "h3": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "h4": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "i1": {
+              "type": "string"
+            },
+            "i2": {
+              "type": "string"
+            },
+            "i3": {
+              "type": "string"
+            },
+            "i4": {
+              "type": "string"
+            },
+            "i5": {
+              "type": "string"
+            },
+            "header_protection_key": {
+              "type": "string"
+            },
+            "content_padding_addition": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "rekey_after_time": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "rekey_timeout": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "reject_after_time": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "keepalive_timeout": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "max_handshake_attempts": {
+              "$ref": "#/$defs/AmneziaWGRange"
+            },
+            "random_trailers": {
+              "type": "boolean"
+            },
+            "disable_cookies": {
+              "type": "boolean"
             }
           },
           "required": [

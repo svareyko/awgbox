@@ -1,0 +1,59 @@
+{
+  "log": {
+    "level": "info"
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "address": [
+        "172.19.0.1/30"
+      ],
+      "auto_route": true,
+      "strict_route": true
+    }
+  ],
+  "endpoints": [
+    {
+      "type": "wireguard",
+      "tag": "awg",
+      "mtu": 1280,
+      "address": [
+        "10.8.0.2/32"
+      ],
+      "private_key": "SD+QN1yME7TRlKaAWVe1lGgKzSYxwrEf3z80A12J2Hs=",
+      "jc": 4,
+      "jmin": 40,
+      "jmax": 70,
+      "s1": 68,
+      "s2": 149,
+      "s3": 32,
+      "s4": 16,
+      "h1": 1785263459,
+      "h2": 389527153,
+      "h3": 1103948204,
+      "h4": 2093847211,
+      "peers": [
+        {
+          "address": "203.0.113.1",
+          "port": 443,
+          "public_key": "+MlQpO/DVfRTaWv3IaNt2GWm/AvBwWfMzfaiTUXm5ms=",
+          "allowed_ips": [
+            "0.0.0.0/0",
+            "::/0"
+          ],
+          "persistent_keepalive_interval": 25
+        }
+      ]
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "rules": [
+      {
+        "action": "sniff"
+      }
+    ],
+    "final": "awg"
+  }
+}

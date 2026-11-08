@@ -55,6 +55,11 @@ func NewEndpoint(options EndpointOptions) (*Endpoint, error) {
 	if options.ListenPort != 0 {
 		ipcConf += "\nlisten_port=" + F.ToString(options.ListenPort)
 	}
+	amneziaWGLines, err := options.AmneziaWG.IpcLines()
+	if err != nil {
+		return nil, err
+	}
+	ipcConf += amneziaWGLines
 	var peers []peerConfig
 	for peerIndex, rawPeer := range options.Peers {
 		peer := peerConfig{
@@ -101,7 +106,10 @@ func NewEndpoint(options EndpointOptions) (*Endpoint, error) {
 	}
 	allowedAddresses := allowedIPSet.Prefixes()
 	if options.MTU == 0 {
-		options.MTU = 1408
+		options.MTU = options.AmneziaWG.defaultMTU()
+	} else if budget, exceeded := options.AmneziaWG.mtuBudget(options.MTU); exceeded {
+		options.Logger.Warn("amneziawg: mtu ", options.MTU, " exceeds the budget of ", budget,
+			" for s4 ", options.AmneziaWG.S4, " (1492 path - 28 IP/UDP - 32 WireGuard - s4), transport packets may be dropped")
 	}
 	deviceOptions := DeviceOptions{
 		Context:         options.Context,

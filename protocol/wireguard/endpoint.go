@@ -126,7 +126,8 @@ func NewEndpoint(ctx context.Context, router adapter.Router, logger log.ContextL
 				Reserved:                    it.Reserved,
 			}
 		}),
-		Workers: options.Workers,
+		Workers:   options.Workers,
+		AmneziaWG: amneziaWGOptions(options.AmneziaWGOptions),
 	})
 	if err != nil {
 		return nil, err
@@ -341,4 +342,34 @@ func (w *Endpoint) PreferredAddress(metadata *adapter.InboundContext, address ne
 		return false
 	}
 	return w.endpoint.Lookup(address) != nil
+}
+
+func amneziaWGOptions(options option.AmneziaWGOptions) wireguard.AmneziaWGOptions {
+	return wireguard.AmneziaWGOptions{
+		Jc:                     options.Jc,
+		Jmin:                   options.Jmin,
+		Jmax:                   options.Jmax,
+		S1:                     options.S1,
+		S2:                     options.S2,
+		S3:                     options.S3,
+		S4:                     options.S4,
+		H1:                     options.H1.Spec(),
+		H2:                     options.H2.Spec(),
+		H3:                     options.H3.Spec(),
+		H4:                     options.H4.Spec(),
+		I1:                     options.I1,
+		I2:                     options.I2,
+		I3:                     options.I3,
+		I4:                     options.I4,
+		I5:                     options.I5,
+		HeaderProtectionKey:    options.HeaderProtectionKey,
+		ContentPaddingAddition: options.ContentPaddingAddition.Spec(),
+		RekeyAfterTime:         options.RekeyAfterTime.Spec(),
+		RekeyTimeout:           options.RekeyTimeout.Spec(),
+		RejectAfterTime:        options.RejectAfterTime.Spec(),
+		KeepaliveTimeout:       options.KeepaliveTimeout.Spec(),
+		MaxHandshakeAttempts:   options.MaxHandshakeAttempts.Spec(),
+		RandomTrailers:         options.RandomTrailers,
+		DisableCookies:         options.DisableCookies,
+	}
 }

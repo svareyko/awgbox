@@ -138,7 +138,7 @@ func (c *ClientBind) receive(packets [][]byte, sizes []int, eps []conn.Endpoint)
 		return
 	}
 	sizes[0] = n
-	if n > 3 {
+	if n > 3 && c.hasReserved() {
 		b := packets[0]
 		clear(b[1:4])
 	}
@@ -184,7 +184,9 @@ func (c *ClientBind) Send(bufs [][]byte, ep conn.Endpoint, offset int) error {
 			if !loaded {
 				reserved = c.reserved
 			}
-			copy(buf[1:4], reserved[:])
+			if reserved != [3]uint8{} {
+				copy(buf[1:4], reserved[:])
+			}
 		}
 		_, err = udpConn.WriteToUDPAddrPort(buf, destination)
 		if err != nil {
@@ -205,6 +207,23 @@ func (c *ClientBind) ParseEndpoint(s string) (conn.Endpoint, error) {
 
 func (c *ClientBind) BatchSize() int {
 	return 1
+}
+
+// hasReserved reports whether a non-zero reserved value is configured, by
+// default or for some endpoint (WARP). Otherwise bytes 1-3 belong to the
+// packet, which an AmneziaWG magic header uses, and must be left untouched.
+func (c *ClientBind) hasReserved() bool {
+	if c.reserved != [3]uint8{} {
+		return true
+	}
+	c.reservedAccess.RLock()
+	defer c.reservedAccess.RUnlock()
+	for _, reserved := range c.reservedForEndpoint {
+		if reserved != [3]uint8{} {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *ClientBind) SetReservedForEndpoint(destination netip.AddrPort, reserved [3]byte) {
