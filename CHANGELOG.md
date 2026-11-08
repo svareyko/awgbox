@@ -3,6 +3,17 @@
 **Read this when:** you need to know what changed in a release of this fork, or you are adding an
 entry. Grep it, do not read it. Newest first. Upstream's own changes are in its release notes.
 
+## 1.14.4-awg.2 (2026-11-08)
+
+The product is named awgbox; no functional change.
+
+- Binary `awgbox` (`awgbox.exe` on Windows), archives `awgbox-<version>-<os>-<arch>.tar.gz` and
+  `.zip` with a top directory of the same name, `version` banner `awgbox version <version>`, cobra
+  `Use` name `awgbox`, workflow artifact `awgbox-<version>`. The Go module path, the import paths and
+  the main package `cmd/sing-box` stay upstream's.
+- README, CLAUDE.md, NOTICE and the AmneziaWG docs section use the new name; "sing-box" remains
+  where it names the origin of the code or a licence.
+
 ## 1.14.4-awg.1 (2026-11-08)
 
 First release. SagerNet/sing-box v1.14.4 plus AmneziaWG 3.1 in the `wireguard` endpoint:
