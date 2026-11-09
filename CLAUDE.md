@@ -69,7 +69,7 @@ nightly and need upstream's secrets). Everything else is upstream and stays so.
 | Interop against amneziawg-go | `cd wireguard-go/interop && go test ./...` (downloads amneziawg-go v3.1.20260828 into the module cache) |
 | Check a config | `go run ./cmd/sing-box check -c examples/amneziawg-client.json` |
 | Regenerate the schema after changing options | `go run -ldflags "$(cat release/LDFLAGS)" -tags "$(cat release/DEFAULT_BUILD_TAGS_OTHERS)" ./cmd/sing-box schema -o docs/schema.json` |
-| Release archives | `powershell -NoProfile -ExecutionPolicy Bypass -File build\build.ps1 -Version 1.14.4-awg.2 [-Go G:\TOOLS\go\bin\go.exe]` or `make awg-release AWG_VERSION=1.14.4-awg.2`; output in `dist/<version>/`: `awgbox-<version>-<os>-<arch>.{tar.gz,zip}`, `SHA256SUMS`, `SHA256SUMS.binaries` |
+| Release archives | `powershell -NoProfile -ExecutionPolicy Bypass -File build\build.ps1 -Version 1.14.4-awg.3 [-Go G:\TOOLS\go\bin\go.exe]` or `make awg-release AWG_VERSION=1.14.4-awg.3`; output in `dist/<version>/`: `awgbox-<version>-<os>-<arch>.{tar.gz,zip}`, `SHA256SUMS`, `SHA256SUMS.binaries` |
 
 Upstream's `test/` module needs Docker and is not run here. Of upstream's own tests, `common/windivert` and `common/tlsspoof` need administrator rights (they load the WinDivert driver) and the three `TestWindowsClient*TLS13` tests in `common/tls` need Schannel TLS 1.3 (Windows 11); everything else passes on Windows 10. Windows builds need no `wintun.dll`:
 sing-tun embeds wintun 0.14.1 (SHA-256 of the embedded DLLs: amd64
@@ -78,8 +78,8 @@ sing-tun embeds wintun 0.14.1 (SHA-256 of the embedded DLLs: amd64
 
 ## Versions and releases
 
-Versions are `<upstream>-awg.<n>`: `1.14.4-awg.2`. The version is baked at build time from the tag
-on `HEAD` (`v1.14.4-awg.2`) or from `-Version`; `constant/version.go` stays upstream's `unknown`.
+Versions are `<upstream>-awg.<n>`: `1.14.4-awg.3`. The version is baked at build time from the tag
+on `HEAD` (`v1.14.4-awg.3`) or from `-Version`; `constant/version.go` stays upstream's `unknown`.
 Pushing a `v*-awg.*` tag runs `awg-release.yml`, which builds the five targets on `ubuntu-latest`
 with the same script and attaches `*.tar.gz`, `*.zip`, `SHA256SUMS` and `SHA256SUMS.binaries` to a
 GitHub release. Every release gets an entry in `CHANGELOG.md`.

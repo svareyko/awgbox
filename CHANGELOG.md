@@ -3,6 +3,24 @@
 **Read this when:** you need to know what changed in a release of this fork, or you are adding an
 entry. Grep it, do not read it. Newest first. Upstream's own changes are in its release notes.
 
+## 1.14.4-awg.3 (2026-11-09)
+
+The `wireguard` endpoint keeps working on a machine without IPv6 on the outgoing interface.
+
+- `wireguard-go/conn/bind_std.go`: when the IPv4 socket opened and the IPv6 one fails with any
+  error, `StdNetBind.Open` keeps IPv4, warns once per distinct cause ("IPv6 bind failed: <err>;
+  running IPv4 only") and goes on; it fails only when neither family opened. Before, only
+  `EAFNOSUPPORT` was tolerated: on Windows, `auto_detect_interface` pinning the IPv6 socket to a
+  Wi-Fi adapter with IPv6 disabled fails with "An invalid argument was supplied", the bind closed
+  IPv4 too, and every handshake then failed with "address family not supported by protocol". The
+  port reported by `Open` is the IPv4 socket's when IPv6 failed; a v4-mapped destination leaves
+  through the IPv4 socket when there is no IPv6 one; a rebind behaves the same. A consequence of
+  the new policy: a fixed `listen_port` whose IPv6 side another program holds now runs IPv4 only
+  with the same warning, where it used to fail.
+- `transport/wireguard/endpoint.go`: the bind's warning goes to the endpoint's logger
+  (`StdNetBind.SetWarnFunc`).
+- Test: `wireguard-go/conn/bind_ipv4only_test.go`.
+
 ## 1.14.4-awg.2 (2026-11-08)
 
 The product is named awgbox; no functional change.

@@ -110,11 +110,11 @@ Requirements: Go 1.26.5 (the toolchain is pinned with `GOTOOLCHAIN=local`; any G
 the build tags of upstream's release (`release/DEFAULT_BUILD_TAGS_OTHERS`, darwin without `with_usbip`).
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File build\build.ps1 -Version 1.14.4-awg.2
+powershell -NoProfile -ExecutionPolicy Bypass -File build\build.ps1 -Version 1.14.4-awg.3
 ```
 
 ```bash
-make awg-release AWG_VERSION=1.14.4-awg.2
+make awg-release AWG_VERSION=1.14.4-awg.3
 ```
 
 Both call `go run ./build/release`, which builds `darwin-arm64`, `darwin-amd64`, `windows-amd64`,
@@ -128,7 +128,7 @@ Both call `go run ./build/release`, which builds `darwin-arm64`, `darwin-amd64`,
 | `SHA256SUMS.binaries` | SHA-256 of the binaries inside them |
 
 `awgbox version` prints the version given. Without `-Version` the scripts take the tag on `HEAD`
-(`v1.14.4-awg.2` becomes `1.14.4-awg.2`). Pushing such a tag runs
+(`v1.14.4-awg.3` becomes `1.14.4-awg.3`). Pushing such a tag runs
 [.github/workflows/awg-release.yml](.github/workflows/awg-release.yml), which builds the same five
 archives and attaches them to a GitHub release.
 

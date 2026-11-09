@@ -9,6 +9,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net"
 	"net/netip"
 	"runtime"
@@ -68,6 +69,38 @@ type StdNetBind struct {
 
 	blackhole4 bool
 	blackhole6 bool
+
+	// warnf receives the warning logged when the IPv6 socket cannot be opened
+	// and the bind runs on IPv4 only; see SetWarnFunc. ipv6Warned holds the
+	// cause of the last error reported, so that a rebind failing the same
+	// way stays quiet.
+	warnf      func(format string, args ...any)
+	ipv6Warned string
+}
+
+// SetWarnFunc sets where the bind reports conditions it survives, such as an
+// IPv6 socket that could not be opened. Call it before Open.
+func (s *StdNetBind) SetWarnFunc(warnf func(format string, args ...any)) {
+	s.warnf = warnf
+}
+
+func (s *StdNetBind) warnIPv6Unavailable(err error) {
+	// The listen error names the port, which changes on every rebind; the
+	// cause underneath it does not.
+	cause := err
+	for inner := errors.Unwrap(cause); inner != nil; inner = errors.Unwrap(cause) {
+		cause = inner
+	}
+	message := cause.Error()
+	if message == s.ipv6Warned {
+		return
+	}
+	s.ipv6Warned = message
+	if s.warnf != nil {
+		s.warnf("IPv6 bind failed: %v; running IPv4 only", err)
+	} else {
+		log.Printf("IPv6 bind failed: %v; running IPv4 only", err)
+	}
 }
 
 func NewStdNetBind(externalControl control.Func) Bind {
@@ -209,15 +242,31 @@ again:
 	}
 
 	// Listen on the same port as we're using for ipv4.
-	v6conn, port, err = listenNet(s.externalControl, "udp6", port)
+	var v6port int
+	v6conn, v6port, err = listenNet(s.externalControl, "udp6", port)
+	if err == nil {
+		port = v6port
+	}
 	if uport == 0 && errors.Is(err, syscall.EADDRINUSE) && tries < 100 {
 		v4conn.Close()
 		tries++
 		goto again
 	}
-	if err != nil && !errors.Is(err, syscall.EAFNOSUPPORT) {
-		v4conn.Close()
-		return nil, 0, err
+	if err != nil {
+		if v4conn == nil {
+			if errors.Is(err, syscall.EAFNOSUPPORT) {
+				return nil, 0, syscall.EAFNOSUPPORT
+			}
+			return nil, 0, err
+		}
+		// awgbox: keep the IPv4 socket whatever the IPv6 error. Binding the
+		// IPv6 socket to an interface whose IPv6 is disabled fails on Windows
+		// with WSAEINVAL, not EAFNOSUPPORT, and closing IPv4 then left the bind
+		// with no socket at all.
+		v6conn = nil
+		s.warnIPv6Unavailable(err)
+	} else {
+		s.ipv6Warned = ""
 	}
 	var fns []ReceiveFunc
 	if v4conn != nil {
@@ -480,7 +529,10 @@ func (s *StdNetBind) Send(bufs [][]byte, endpoint Endpoint, offset int) error {
 	offload := s.ipv4TxOffload
 	br := batchWriter(s.ipv4PC)
 	is6 := false
-	if standardEndpoint.DstIP().Is6() {
+	// awgbox: a v4-mapped destination goes out of the IPv4 socket when the
+	// bind runs IPv4 only.
+	dstIP := standardEndpoint.DstIP()
+	if dstIP.Is6() && !(dstIP.Is4In6() && s.ipv6 == nil && s.ipv4 != nil) {
 		blackhole = s.blackhole6
 		conn = s.ipv6
 		br = s.ipv6PC
